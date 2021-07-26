@@ -18,3 +18,13 @@ That said, I'll try to add links to everything I used so it's easier to follow t
 - [ ] [HDMI adapter](https://www.amazon.com/gp/product/B08J8BJQLB/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&psc=1) 
 - [ ] [Dupont Jumper cables male to female](https://www.amazon.com/gp/product/B07GD17ZF3/ref=ppx_yo_dt_b_asin_title_o03_s00?ie=UTF8&psc=1) 
 - [ ] [Ultralink 10000mah power bank](https://www.guzzle.co.za/specials/view/1075115/) 
+- [ ] Micro USB cable X2 - one to power the pi and one to charge the powerbank
+- [ ] Screws x4 - to mount the screen
+
+Here are the tools I used when prototyping/building:
+
+- [ ] 3D Printer - I use a Creality Ender-5 Pro but if you don't have access to a 3D printer, there are several online services you could try
+- [ ] Soldering iron 
+- [ ] Hot glue gun
+- [ ] Screwdriver
+- [ ] mask (for spray painting)
