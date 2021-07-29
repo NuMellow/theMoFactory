@@ -13,7 +13,7 @@ Welcome to the MoFactory! A project with the goal of making a real and functioni
     - [Hardware](#hardware)
         - [Bill of Materials](#bill-of-materials)
         - [Build Instructions](#build-instructions)
-    -[Software](#software)
+    - [Software](#software)
         
 
 ## Contributing
