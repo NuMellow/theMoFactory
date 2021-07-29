@@ -1,3 +1,22 @@
+# The MoFactory
+Welcome to the MoFactory! A project with the goal of making a real and functioning BMO from the show adventure time! The side goal in doing so is to learn as much as possible about design, electronics, project management and more. All files are open source so you can build one for yourself and/or contribute to the project too. Now with all that said, "Who wants to play video games?"
+
+<img src="media/bmo.jpg" width="40%">
+
+## Contents
+
+- [Contributing](#)
+- [About BMO](#)
+    - [Hardware specs](#)
+    - [Software structure](#)
+- [Building BMO](#)
+    - [Hardware](#)
+        - [Bill of Materials](#bill-of-materials)
+        - [Build Instructions](#)
+    -[Software](#)
+        - [Setup and Running the software](#)
+
+
 ## Bill of Materials
 The follwing are the parts I used in the build. Since I wanted to use components I already had instead of buying everything, some things might be harder to find or
 may be less efficient than other components, for example I used a power bank I had lying around instead of getting a LiPo battery which would have been lighter and
@@ -19,7 +38,6 @@ That said, I'll try to add links to everything I used so it's easier to follow t
 - [ ] [Dupont Jumper cables male to female](https://www.amazon.com/gp/product/B07GD17ZF3/ref=ppx_yo_dt_b_asin_title_o03_s00?ie=UTF8&psc=1) 
 - [ ] [Ultralink 10000mah power bank](https://www.guzzle.co.za/specials/view/1075115/) 
 - [ ] Micro USB cable X2 - one to power the pi and one to charge the powerbank
-- [ ] Screws x4 - to mount the screen
 
 Here are the tools I used when prototyping/building:
 
