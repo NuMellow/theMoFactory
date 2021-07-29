@@ -5,19 +5,28 @@ Welcome to the MoFactory! A project with the goal of making a real and functioni
 
 ## Contents
 
-- [Contributing](#)
-- [About BMO](#)
-    - [Hardware specs](#)
-    - [Software structure](#)
-- [Building BMO](#)
-    - [Hardware](#)
+- [Contributing](#contributing)
+- [About BMO](#about-bmo)
+    - [Hardware specs](#hardware-specs)
+    - [Software structure](#software-structure)
+- [Building BMO](#building-bmo)
+    - [Hardware](#hardware)
         - [Bill of Materials](#bill-of-materials)
-        - [Build Instructions](#)
-    -[Software](#)
-        - [Setup and Running the software](#)
+        - [Build Instructions](#build-instructions)
+    -[Software](#software)
+        
 
+## Contributing
 
-## Bill of Materials
+## About BMO
+
+### Hardware Specs
+
+### Software Structure
+
+## Building BMO
+### Hardware
+#### Bill of Materials
 The follwing are the parts I used in the build. Since I wanted to use components I already had instead of buying everything, some things might be harder to find or
 may be less efficient than other components, for example I used a power bank I had lying around instead of getting a LiPo battery which would have been lighter and
 possibly take up less space.
@@ -46,3 +55,7 @@ Here are the tools I used when prototyping/building:
 - [ ] Hot glue gun
 - [ ] Screwdriver
 - [ ] mask (for spray painting)
+
+#### Build Instructions
+
+### Software
