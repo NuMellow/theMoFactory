@@ -1,7 +1,7 @@
 # The MoFactory
 Welcome to the MoFactory! A project with the goal of making a real and functioning BMO from the show adventure time! The side goal in doing so is to learn as much as possible about design, electronics, project management and more. All files are open source so you can build one for yourself and/or contribute to the project too. Now with all that said, "Who wants to play video games?"
 
-![](media/bmo.jpg)
+<img src="media/bmo.jpg" width="40%">
 
 ## Contents
 
