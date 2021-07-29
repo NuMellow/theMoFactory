@@ -5,16 +5,16 @@ Welcome to the MoFactory! A project with the goal of making a real and functioni
 
 ## Contents
 
-- [Contributing] (#)
-- [About BMO] (#)
-    - [Hardware specs] (#)
-    - [Software structure] (#)
-- [Building BMO] (#)
-    - [Hardware] (#)
-        - [Bill of Materials] (#bill-of-materials)
-        - [Build Instructions] (#)
-    -[Software] (#)
-        - [Setup and Running the software] (#)
+- [Contributing](#)
+- [About BMO](#)
+    - [Hardware specs](#)
+    - [Software structure](#)
+- [Building BMO](#)
+    - [Hardware](#)
+        - [Bill of Materials](#bill-of-materials)
+        - [Build Instructions](#)
+    -[Software](#)
+        - [Setup and Running the software](#)
 
 
 ## Bill of Materials
