@@ -27,7 +27,7 @@ Welcome to the MoFactory! A project with the goal of making a real and functioni
 ## Building BMO
 ### Hardware
 #### Bill of Materials
-The follwing are the parts I used in the build. Since I wanted to use components I already had instead of buying everything, some things might be harder to find or
+The following are the parts I used in the build. Since I wanted to use components I already had instead of buying everything, some things might be harder to find or
 may be less efficient than other components, for example I used a power bank I had lying around instead of getting a LiPo battery which would have been lighter and
 possibly take up less space.
 
@@ -140,13 +140,13 @@ I had acrylic paint lying around so I used that to paint the buttons.
 - Next we will glue the speaker in the slot, adding the glue to the outer edges.
 
 - Now we can connect the button cables to the pi. The power wires will go to the 3.3v pins on the pi (pins 1 and 17), then the rest will follow this configuration:
-    up = pin 13
-    down = pin 15
-    left = pin 16
-    right = pin 11
-    green button = pin 18
-    red button = pin 31
-    blue buton = pin 29
+    - up = pin 13
+    - down = pin 15
+    - left = pin 16
+    - right = pin 11
+    - green button = pin 18
+    - red button = pin 31
+    - blue buton = pin 29
 - You can also connect the hdmi cable
 
 - The final peice to glue will be the face part to the body. For this part we will use super glue. Add the glue to the edges of the front piece and then press to the body piece for a few minutes till it's firm. You can place it face down so you won't have to hold it the whole time. Just be careful for the screen, we know how many times BMO has cracked his face :)
