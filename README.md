@@ -91,7 +91,7 @@ I had acrylic paint lying around so I used that to paint the buttons.
 - you can connect the hdmi cable to the screen and bend the cable acouple of times to make it more flexible.
 
 ##### Adding the buttons
-- For this step we will need the push buttons, the pcb board, jumper wires and a soldering gun. In order to fit in the case you will need the 4*6cm board for the directional buttons and the 3*7cm board for the action buttons. The push buttons have a negative and positive pin, the former of which we can connect all to the same point while the later will each have their own pin so we can tell what button is being pressed.
+- For this step we will need the push buttons, the pcb board, jumper wires and a soldering gun. In order to fit in the case you will need the 4x6cm board for the directional buttons and the 3x7cm board for the action buttons. The push buttons have two pins we will use, one which we can connect all to the same point will provide power while the other will each connect to their own pin on the pi so we can tell what button is being pressed.
 
 - The buttons fit very snugly in the pcb board so the first step will be arranging them on the board. For the directional buttons, we'll place the buttons in the center of the 4*6cm board, leaving a clear row in at least one of the ends of the board.
 
@@ -99,7 +99,15 @@ I had acrylic paint lying around so I used that to paint the buttons.
 
 - Once that is done, the next part is to solder the ground cable. Get a male to male dupont cable and connect it to the top pin at the end of the board that you left clear in the first step. It's a loose fit, so you will need to solder the cable in place. Make sure the cable is pointing away from the buttons (as shown in the picture)
 
-- Next we'll need to add a resistor to the circuit which will limit the amount of current flow. Add it next to the cable that was just soldered 
+- Next we'll need to add a resistor to the circuit which will limit the amount of current flow. Add it next to the cable that was just soldered and solder one end of the resistor to the cable.
+
+- Next we will add a cable in the same row as the resistor, soldering their ends passing the wire next to one of the pins of the button. Solder these points too and repeat for the remaining 3 buttons (see picture for reference)
+
+- Once there is a cable connecting each button to the power line, we add cables and solder them to the adjacent pins on the buttons. We'll leave the ends sticking out for now and connect them to the pi in a later step. (see picture for reference)
+
+- We will repeat the process for the action buttons. Using the 3x7cm board we will place the buttons in the center. The button placement isn't as uniform as with the directional buttons so we will use the face part to make sure the alignment is correct (see picture for reference).
+
+- All the other steps involving soldering are the same as the previous steps. (remember to refer to the images for reference)
 
 ##### Adding the speaker
 - We're actually going to need to remove the speaker from its casing. There are speaker modules you can buy and add an amplifier to but at the time I thought this might be a simpler solution. That and I wasn't sure how that worked. Definitely something I could improve later.
@@ -131,11 +139,7 @@ I had acrylic paint lying around so I used that to paint the buttons.
 
 - Next we will glue the speaker in the slot, adding the glue to the outer edges.
 
-- The final peice to glue will be the face part to the body. For this part we will use super glue. Add the glue to the edges of the front piece and then press to the body piece for a few minutes till it's firm. You can place it face down so you won't have to hold it the whole time. Just be careful for the screen, we know how many times BMO has cracked his face :)
-
-- Once the glue is all set we can add the button parts which should fit fine without any glue.
-
-- The final stage will be to connect the button cables to the pi. The power wires will go to the 3.3v pins on the pi (pins 1 and 17), then the rest will follow this configuration:
+- Now we can connect the button cables to the pi. The power wires will go to the 3.3v pins on the pi (pins 1 and 17), then the rest will follow this configuration:
     up = pin 13
     down = pin 15
     left = pin 16
@@ -143,9 +147,21 @@ I had acrylic paint lying around so I used that to paint the buttons.
     green button = pin 18
     red button = pin 31
     blue buton = pin 29
+- You can also connect the hdmi cable
+
+- The final peice to glue will be the face part to the body. For this part we will use super glue. Add the glue to the edges of the front piece and then press to the body piece for a few minutes till it's firm. You can place it face down so you won't have to hold it the whole time. Just be careful for the screen, we know how many times BMO has cracked his face :)
+
+- Once the glue is all set we can add the button parts which should fit fine without any glue.
 
 - We are just about done! Next let's add some batteries!
 
 ##### Adding the battery
+- As mentioned earlier, I was trying to use as many parts I already had lying around and so it turns out the powerbank I used is not very common to get (Unless you are in South Africa). Have no fear though, we should be able to use any other powerbank, just make sure it has:
+- [ ] 5V 2A output
+- [ ] not much bigger than 25mm x mm x 120mm (these were the dimensions of mine)
+- [ ] If it has an 'on' button, you can access it after fitting it in.
+
+- I ended up not gluing the back so that I can still access it when needed. Perhaps in the future I will try it with Lipo batteries. 
+- But after all that, we are done!!
 
 ### Software
