@@ -1,4 +1,5 @@
 import pygame
+import os
 
 # Initializes pygame
 pygame.init()
@@ -12,22 +13,33 @@ pygame.display.set_caption("BMO")
 #pygame.display.set_icon(icon)
 
 # BMO face
-#bmo_face = pygame.image.load('bmo.gif')
-bmo_x = 400
-bmo_y = 300
+img_name = os.path.join('img', 'bmo_smile.png')
+gif_name = os.path.join('img', 'breakdance.gif')
+bmo_face = pygame.image.load(img_name)
+bmo_x = 0
+bmo_y = 0
+
+# backgrounds
+bmo_bg_color = (199,249,214)
 
 def bmo():
-	screen.blit(bmo_face, (bmo_x, bmo_y)
+	screen.blit(bmo_face, (bmo_x, bmo_y))
+
+def openMenu():
+	menu_bg = (0,0,0)
 
 #Game loop
 running = True
 while running:
 	
-	screen.fill((199,249,214))
+	screen.fill(bmo_bg_color)
 	
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			running = False
+		elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+			openMenu() #Open Menu
+
 			
 	bmo()
 	pygame.display.update()
