@@ -33,15 +33,37 @@ def load_image(name, colorKey=None):
         image.set_colorkey(colorKey, pygame.RLEACCEL)
     return image, image.get_rect()
 
+class Computer(pygame.sprite.Sprite):
+    """CPU Abe"""
+
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self) #call Sprite initializer
+        self.image, self.rect = load_image("AbeLCbase.png", -1)
+        self.pos = (100, 50)
+        self.throw = 0
+        self.move = 9
+        self.rect = self.rect.move((SCREEN_WIDTH - self.rect.w, 50))
+
+    def update(self, direction):
+        """Move cpu abe"""
+        1
+    
+    def throw(self, target):
+        """Throw the ball"""
+        1
+
 class Player(pygame.sprite.Sprite):
     """Player Abe"""
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self) # call Sprite initializer
-        self.image, self.rect = load_image("breakdance.gif", -1)
-        self.pos = (0,0)
+        self.image, self.rect = load_image("AbeLbase.png", -1)
+        self.default = self.image
+        self.kick_img, self.kick_rect = load_image('AbeLkick.png', -1)
+        self.pos = (0,50)
         self.kicking = 0
         self.move = 9
+        self.rect = self.rect.move((0, 50))
 
     def update(self, direction):
         """Move abe based on directional buttons"""
@@ -59,20 +81,24 @@ class Player(pygame.sprite.Sprite):
         """returns true if the kick connects with the ball"""
         if not self.kicking:
             self.kicking = 1
+            self.image = self.kick_img
+            screen.blit(self.image, self.rect)
             hitbox = self.rect.inflate(-5, -5)
-            return hitbox.collidrect(target.rect)
+            return hitbox.colliderect(target.rect)
 
 def main():
     running = True
 
-    #fisplay the background
+    #display the background
     screen.blit(background, (0,0))
     pygame.display.flip()
 
     #Prepare game objects
     clock = pygame.time.Clock()
     player = Player()
-    allsprites = pygame.sprite.RenderPlain((player))
+    computer = Computer()
+    allsprites = pygame.sprite.RenderPlain((player, computer))
+    tome = 0
 
     while running:
         clock.tick(60)
@@ -84,8 +110,14 @@ def main():
                 player.update("right")
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 player.update("left")
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                player.kick(computer)
+                tome = 0
         
-        
+        tome += 1
+        if tome % 60 == 0:
+            player.kicking = 0
+            player.image = player.default
 
         #Draw everything
         screen.blit(background, (0,0))
