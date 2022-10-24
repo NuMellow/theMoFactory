@@ -1,5 +1,9 @@
+import math
+from random import randint
+from math import e
 import pygame
 import os
+
 
 # Initialize pygame
 pygame.init()
@@ -38,19 +42,48 @@ class Computer(pygame.sprite.Sprite):
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self) #call Sprite initializer
+        self.base_image, self.base_rect = load_image("AbeLCbase.png", -1)
         self.image, self.rect = load_image("AbeLCbase.png", -1)
+        self.throw_img, self.throw_img_rect = load_image('AbeLCthrow.png', -1)
+        self.look_up_img, self.look_up_rect = load_image('AbeLCscore.png', -1)
         self.pos = (100, 50)
         self.throw = 0
         self.move = 9
+        self.holding_ball = 1
         self.rect = self.rect.move((SCREEN_WIDTH - self.rect.w, 50))
 
-    def update(self, direction):
+    def update(self, ball):
         """Move cpu abe"""
-        1
-    
-    def throw(self, target):
+
+        if self.throw == 0:
+            self.pace(ball)
+        else:
+            self.throw_ball(ball)
+            self.holding_ball = 0
+
+    def pace(self, ball):
+        direction = randint(-1, 1)
+        move = 0
+        new_pos = self.rect.move((0, 0))
+        if direction == -1: #move left
+            new_pos = self.rect.move((-self.move, 0))
+            move = -self.move
+        elif direction == 1:
+            new_pos = self.rect.move((self.move, 0))
+            move = self.move
+        self.rect = new_pos
+        ball.update(move)
+
+    def throw_ball(self, ball):
         """Throw the ball"""
-        1
+        self.image = self.throw_img
+        screen.blit(self.image, self.rect)
+        ball.thrown = 1
+    
+    def look_up(self):
+        """Look up"""
+        self.image = self.look_up_img
+        screen.blit(self.image, self.rect)
 
 class Player(pygame.sprite.Sprite):
     """Player Abe"""
@@ -86,6 +119,53 @@ class Player(pygame.sprite.Sprite):
             hitbox = self.rect.inflate(-5, -5)
             return hitbox.colliderect(target.rect)
 
+class Ball(pygame.sprite.Sprite):
+    """The Ball"""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.image, self.rect = load_image("ball_cropped.png", -1)
+        self.kicked = 0
+        self.thrown = 0
+        self.rect = self.rect.move((SCREEN_WIDTH - self.rect.w - 150, 130))
+        self.move = 5
+
+    def update(self, pos):
+        self.rect = self.rect.move((pos, 0))
+
+    def fall_ball(self):
+        #ball uses [bell curve formula] for it's arc
+        const1 = 1.8
+        const2 = 3.3
+        b = -0.6
+        u = 1.6
+        # y = const1 + (const2 * (1/b * math.sqrt(2 * math.pi) * e**(-0.5**((self.rect.x - u)/b)**2 )))
+        
+        y = 1/1 + (e**-self.move)
+        new_pos = self.rect.move((-self.move, y))
+        self.rect = new_pos
+        # print(self.rect.x, self.rect.y)
+
+    def hit(self):
+        self.thrown = 0
+        self.kicked = 1
+        y = 1/1 + (e**-self.move)
+        new_pos = self.rect.move((self.move, -y))
+        self.rect = new_pos
+            
+def resetComputer(computer, ball):
+    # reset_balls_y = (SCREEN_HEIGHT - ball.rect.y) 
+    # ball.rect = ball.rect.move((SCREEN_WIDTH - ball.rect.w - 50, reset_balls_y))
+    # ball.rect = ball.rect.move((0, -450))
+    # ball.thrown = 0
+    ball.__init__()
+    # computer.throw = 0
+    # computer.holding_ball = 1
+    # computer.image = computer.base_image
+    computer.__init__()
+    screen.blit(computer.image, computer.rect)
+    print("reset")
+
 def main():
     running = True
 
@@ -97,8 +177,14 @@ def main():
     clock = pygame.time.Clock()
     player = Player()
     computer = Computer()
-    allsprites = pygame.sprite.RenderPlain((player, computer))
-    tome = 0
+    ball = Ball()
+    allsprites = pygame.sprite.RenderPlain((player, computer, ball))
+    kick_timeout = 0
+    move_timeout = 0
+    throw_timer = 0
+    hit = False
+    debug_mode = False
+    debug_count = 0
 
     while running:
         clock.tick(60)
@@ -111,11 +197,52 @@ def main():
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 player.update("left")
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                player.kick(computer)
-                tome = 0
+                hit = player.kick(ball)
+                kick_timeout = 0
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                resetComputer(computer, ball)
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_d:
+                debug_mode = not debug_mode 
+            #Debug mode stuff
+            elif debug_mode and event.type == pygame.KEYDOWN and event.key == pygame.K_n:
+                if debug_count == 0:
+                    print('computer')
+                    print(computer.__dict__)
+                elif debug_count == 1:
+                    print('ball')
+                    print(ball.__dict__)
+                elif debug_count == 2:
+                    print('player')
+                    print(player.__dict__)
+                debug_count = (debug_count + 1) % 3
         
-        tome += 1
-        if tome % 60 == 0:
+        if hit:
+            ball.hit()
+
+        #Computer movement
+        move_timeout += 1
+        if computer.holding_ball == 1:
+            if move_timeout % 20 == 0:
+                computer.update(ball=ball)
+
+            throw_timer += 1
+            if throw_timer % 100 == 0:
+                computer.throw = 1
+
+        if ball.thrown == 1:
+            ball.fall_ball()
+
+        if (ball.rect.y > SCREEN_HEIGHT or ball.rect.x < 0) or (ball.rect.y < 0 or ball.rect.x > SCREEN_WIDTH):
+            ball.thrown = 0
+            hit = False
+            resetComputer(computer, ball)
+
+        #computer look up
+        if ball.kicked == 1 and ball.rect.x >= computer.rect.x + 50:
+            computer.look_up()
+
+        kick_timeout += 1
+        if kick_timeout % 60 == 0:
             player.kicking = 0
             player.image = player.default
 
