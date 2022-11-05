@@ -1,0 +1,5 @@
+pygame
+PyAudio
+SpeechRecognition
+pynput
+RPi
