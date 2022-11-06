@@ -135,7 +135,8 @@ class Player(pygame.sprite.Sprite):
             self.kicking = 1
             self.image = self.kick_img
             screen.blit(self.image, self.rect)
-            hitbox = self.rect.inflate(-5, -5)
+            hitbox = self.rect.inflate(0,-150)
+            hitbox = hitbox.move(20, 50)
             return hitbox.colliderect(target.rect)
     
     def add_score(self):
@@ -151,22 +152,22 @@ class Ball(pygame.sprite.Sprite):
         self.thrown = 0
         self.rect = self.rect.move((SCREEN_WIDTH - self.rect.w - 150, 130))
         self.move = 5
+        self.fall_speed = randint(-6, -4)
+        self.top = 0
 
     def update(self, pos):
         self.rect = self.rect.move((pos, 0))
 
     def fall_ball(self):
-        #ball uses [bell curve formula] for it's arc
-        const1 = 1.8
-        const2 = 3.3
-        b = -0.6
-        u = 1.6
-        # y = const1 + (const2 * (1/b * math.sqrt(2 * math.pi) * e**(-0.5**((self.rect.x - u)/b)**2 )))
-        
-        y = 1/1 + (e**-self.move)
-        new_pos = self.rect.move((-self.move, y))
+        if self.rect.y < 10:
+            self.top = 1
+
+        if self.top == 1:
+            new_pos = self.rect.move((-self.move, -self.fall_speed))
+        else:
+            new_pos = self.rect.move((-self.move, self.fall_speed))
         self.rect = new_pos
-        # print(self.rect.x, self.rect.y)
+        print(self.rect.x, self.rect.y)
 
     def hit(self):
         self.thrown = 0
@@ -191,7 +192,7 @@ def main():
 
     #display the background
     screen.blit(background, (0,0))
-    pygame.display.flip()
+    pygame.display.update()
 
     #Prepare game objects
     clock = pygame.time.Clock()
@@ -282,7 +283,7 @@ def main():
         #Draw everything
         screen.blit(background, (0,0))
         allsprites.draw(screen)
-        pygame.display.flip()
+        pygame.display.update()
 
     pygame.quit()      
 
