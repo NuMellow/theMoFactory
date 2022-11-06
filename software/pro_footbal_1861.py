@@ -12,6 +12,8 @@ pygame.init()
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 480
 
+WINNING_SCORE = 333
+
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Title and icon
@@ -42,6 +44,18 @@ class Computer(pygame.sprite.Sprite):
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self) #call Sprite initializer
+        self.base_image, self.base_rect = load_image("AbeLCbase.png", -1)
+        self.image, self.rect = load_image("AbeLCbase.png", -1)
+        self.throw_img, self.throw_img_rect = load_image('AbeLCthrow.png', -1)
+        self.look_up_img, self.look_up_rect = load_image('AbeLCscore.png', -1)
+        self.pos = (100, 50)
+        self.throw = 0
+        self.move = 9
+        self.holding_ball = 1
+        self.rect = self.rect.move((SCREEN_WIDTH - self.rect.w, 50))
+        self.score = 0
+
+    def clear(self):
         self.base_image, self.base_rect = load_image("AbeLCbase.png", -1)
         self.image, self.rect = load_image("AbeLCbase.png", -1)
         self.throw_img, self.throw_img_rect = load_image('AbeLCthrow.png', -1)
@@ -85,18 +99,23 @@ class Computer(pygame.sprite.Sprite):
         self.image = self.look_up_img
         screen.blit(self.image, self.rect)
 
+    def add_score(self):
+        self.score += 33
+
 class Player(pygame.sprite.Sprite):
     """Player Abe"""
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self) # call Sprite initializer
-        self.image, self.rect = load_image("AbeLbase.png", -1)
+        self.image, self.rect = load_image("AbeLbase_cropped.png", -1)
         self.default = self.image
-        self.kick_img, self.kick_rect = load_image('AbeLkick.png', -1)
-        self.pos = (0,50)
+        self.default_rect = self.rect
+        self.kick_img, self.kick_rect = load_image('AbeLkick_cropped.png', -1)
+        self.pos = (50,100)
         self.kicking = 0
         self.move = 9
-        self.rect = self.rect.move((0, 50))
+        self.rect = self.rect.move((50,93))
+        self.score = 0
 
     def update(self, direction):
         """Move abe based on directional buttons"""
@@ -118,6 +137,9 @@ class Player(pygame.sprite.Sprite):
             screen.blit(self.image, self.rect)
             hitbox = self.rect.inflate(-5, -5)
             return hitbox.colliderect(target.rect)
+    
+    def add_score(self):
+        self.score += 33
 
 class Ball(pygame.sprite.Sprite):
     """The Ball"""
@@ -152,17 +174,15 @@ class Ball(pygame.sprite.Sprite):
         y = 1/1 + (e**-self.move)
         new_pos = self.rect.move((self.move, -y))
         self.rect = new_pos
-            
+
+def has_won(abe):
+    if abe.score >= WINNING_SCORE:
+        return True
+    return False
+
 def resetComputer(computer, ball):
-    # reset_balls_y = (SCREEN_HEIGHT - ball.rect.y) 
-    # ball.rect = ball.rect.move((SCREEN_WIDTH - ball.rect.w - 50, reset_balls_y))
-    # ball.rect = ball.rect.move((0, -450))
-    # ball.thrown = 0
     ball.__init__()
-    # computer.throw = 0
-    # computer.holding_ball = 1
-    # computer.image = computer.base_image
-    computer.__init__()
+    computer.clear()
     screen.blit(computer.image, computer.rect)
     print("reset")
 
@@ -233,6 +253,19 @@ def main():
             ball.fall_ball()
 
         if (ball.rect.y > SCREEN_HEIGHT or ball.rect.x < 0) or (ball.rect.y < 0 or ball.rect.x > SCREEN_WIDTH):
+            if (ball.rect.y > SCREEN_HEIGHT or ball.rect.x < 0):
+                computer.add_score()
+            else:
+                player.add_score()
+
+            print(player.score, computer.score)
+            if has_won(player):
+                print("Woo! Player won")
+                break
+            elif has_won(computer):
+                print("Computer won. Woo!")
+                break
+
             ball.thrown = 0
             hit = False
             resetComputer(computer, ball)
