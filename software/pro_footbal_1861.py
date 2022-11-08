@@ -171,7 +171,6 @@ class Ball(pygame.sprite.Sprite):
 
     def hit(self):
         self.thrown = 0
-        self.kicked = 1
         y = 1/1 + (e**-self.move)
         new_pos = self.rect.move((self.move, -y))
         self.rect = new_pos
@@ -219,6 +218,8 @@ def main():
                 player.update("left")
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 hit = player.kick(ball)
+                if hit:
+                    ball.kicked = 1
                 kick_timeout = 0
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                 resetComputer(computer, ball)
@@ -237,7 +238,7 @@ def main():
                     print(player.__dict__)
                 debug_count = (debug_count + 1) % 3
         
-        if hit:
+        if ball.kicked:
             ball.hit()
 
         #Computer movement
