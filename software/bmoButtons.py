@@ -29,8 +29,8 @@ def setup():
    GPIO.add_event_detect(downPin, GPIO.BOTH, callback=down, bouncetime=200)
    GPIO.add_event_detect(rightPin, GPIO.BOTH, callback=right, bouncetime=200)
    GPIO.add_event_detect(leftPin, GPIO.BOTH, callback=left, bouncetime=200)
-   GPIO.add_event_detect(redPin, GPIO.BOTH, callback=click, bouncetime=200)
-   GPIO.add_event_detect(greenPin, GPIO.BOTH, callback=rightClick, bouncetime=200)
+   GPIO.add_event_detect(redPin, GPIO.BOTH, callback=enter, bouncetime=200)
+   GPIO.add_event_detect(greenPin, GPIO.BOTH, callback=tab, bouncetime=200)
    GPIO.add_event_detect(bluePin, GPIO.BOTH, callback=esc, bouncetime=200)
 
 def up(sig):
@@ -54,6 +54,15 @@ def click(sig):
 
 def rightClick(sig):
    mouse.click(Button.right)
+
+def enter(sig):
+   keyboard.press(Key.enter)
+   keyboard.release(Key.enter)
+
+def tab(sig):
+   keyboard.press(Key.tab)
+   keyboard.release(Key.tab)
+
 
 def esc(sig):
    keyboard.press(Key.esc)
