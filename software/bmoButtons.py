@@ -50,10 +50,10 @@ def right(sig):
    keyboard.release(Key.right)
 
 def click(sig):
-   mouse.click(Button.left)
+   mouse.click(Key.enter)
 
 def rightClick(sig):
-   mouse.click(Button.right)
+   mouse.click(Key.tab)
 
 def esc(sig):
    keyboard.press(Key.esc)
