@@ -13,6 +13,8 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 480
 
 WINNING_SCORE = 333
+HUD_COLOR = (65, 61, 61)
+white = (255, 255, 255)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -123,7 +125,6 @@ class Player(pygame.sprite.Sprite):
         if direction == "left":
             #Move left
             newpos = self.rect.move((-self.move, 0))
-            # self.image = pygame.transform.flip(self.image, 1, 0)
         else:
             # move right
             newpos = self.rect.move((self.move, 0))
@@ -167,13 +168,31 @@ class Ball(pygame.sprite.Sprite):
         else:
             new_pos = self.rect.move((-self.move, self.fall_speed))
         self.rect = new_pos
-        print(self.rect.x, self.rect.y)
 
     def hit(self):
         self.thrown = 0
-        y = 1/1 + (e**-self.move)
-        new_pos = self.rect.move((self.move, -y))
+        if self.rect.y < 10:
+            self.top = 1
+
+        if self.top == 1:
+            new_pos = self.rect.move((self.move, self.move))
+        else:
+            new_pos = self.rect.move((self.move, -self.move/2))
         self.rect = new_pos
+
+def text_objects(text, font):
+    text_surface = font.render(text, True, white)
+    return text_surface, text_surface.get_rect()
+
+def player_score(score):
+    font = pygame.font.SysFont(None, 60)
+    text = font.render("P1 - " + str(score), True, white)
+    screen.blit(text, (40, 430))
+
+def computer_score(score):
+    font = pygame.font.SysFont(None, 60)
+    text = font.render("CPU - " + str(score), True, white)
+    screen.blit(text, ((SCREEN_WIDTH/2), 430))
 
 def has_won(abe):
     if abe.score >= WINNING_SCORE:
@@ -184,7 +203,6 @@ def resetComputer(computer, ball):
     ball.__init__()
     computer.clear()
     screen.blit(computer.image, computer.rect)
-    print("reset")
 
 def main():
     running = True
@@ -206,6 +224,10 @@ def main():
     debug_mode = False
     debug_count = 0
 
+    #draw the hud
+    pygame.draw.rect(background, HUD_COLOR, [0, 380, SCREEN_WIDTH, 100])
+    
+
     while running:
         clock.tick(60)
 
@@ -216,10 +238,11 @@ def main():
                 player.update("right")
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 player.update("left")
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            elif event.type == pygame.KEYDOWN and (event.key == pygame.K_SPACE or event.key == pygame.K_RETURN):
                 hit = player.kick(ball)
                 if hit:
                     ball.kicked = 1
+                    ball.top = 0
                 kick_timeout = 0
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                 resetComputer(computer, ball)
@@ -254,8 +277,8 @@ def main():
         if ball.thrown == 1:
             ball.fall_ball()
 
-        if (ball.rect.y > SCREEN_HEIGHT or ball.rect.x < 0) or (ball.rect.y < 0 or ball.rect.x > SCREEN_WIDTH):
-            if (ball.rect.y > SCREEN_HEIGHT or ball.rect.x < 0):
+        if (ball.rect.y > (380 - ball.rect.height)  or ball.rect.x < 0) or (ball.rect.y < 0 or ball.rect.x > SCREEN_WIDTH):
+            if (ball.rect.y > (380 - ball.rect.height) or ball.rect.x < 0):
                 computer.add_score()
             else:
                 player.add_score()
@@ -283,6 +306,8 @@ def main():
 
         #Draw everything
         screen.blit(background, (0,0))
+        player_score(player.score)
+        computer_score(computer.score)
         allsprites.draw(screen)
         pygame.display.update()
 
