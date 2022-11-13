@@ -41,6 +41,17 @@ def load_image(name, colorKey=None):
         image.set_colorkey(colorKey, pygame.RLEACCEL)
     return image, image.get_rect()
 
+def load_sound(name):
+    dir = os.path.join('audio', name)
+    return pygame.mixer.Sound(dir)
+
+#load sounds
+move_sound = load_sound("move.wav")
+kick_sound = load_sound("kick.wav")
+hit_sound = load_sound("hit.wav")
+drop_sound = load_sound("drop.wav")
+throw_sound = load_sound("throw.wav")
+
 class Computer(pygame.sprite.Sprite):
     """CPU Abe"""
 
@@ -87,11 +98,13 @@ class Computer(pygame.sprite.Sprite):
         elif direction == 1:
             new_pos = self.rect.move((self.move, 0))
             move = self.move
+        pygame.mixer.Sound.play(move_sound)
         self.rect = new_pos
         ball.update(move)
 
     def throw_ball(self, ball):
         """Throw the ball"""
+        pygame.mixer.Sound.play(throw_sound)
         self.image = self.throw_img
         screen.blit(self.image, self.rect)
         ball.thrown = 1
@@ -129,6 +142,7 @@ class Player(pygame.sprite.Sprite):
             # move right
             newpos = self.rect.move((self.move, 0))
         self.rect = newpos
+        pygame.mixer.Sound.play(move_sound)
     
     def kick(self, target):
         """returns true if the kick connects with the ball"""
@@ -138,6 +152,7 @@ class Player(pygame.sprite.Sprite):
             screen.blit(self.image, self.rect)
             hitbox = self.rect.inflate(0,-150)
             hitbox = hitbox.move(20, 50)
+            pygame.mixer.Sound.play(kick_sound)
             return hitbox.colliderect(target.rect)
     
     def add_score(self):
@@ -241,6 +256,7 @@ def main():
             elif event.type == pygame.KEYDOWN and (event.key == pygame.K_SPACE or event.key == pygame.K_RETURN):
                 hit = player.kick(ball)
                 if hit:
+                    pygame.mixer.Sound.play(hit_sound)
                     ball.kicked = 1
                     ball.top = 0
                 kick_timeout = 0
@@ -280,6 +296,7 @@ def main():
         if (ball.rect.y > (380 - ball.rect.height)  or ball.rect.x < 0) or (ball.rect.y < 0 or ball.rect.x > SCREEN_WIDTH):
             if (ball.rect.y > (380 - ball.rect.height) or ball.rect.x < 0):
                 computer.add_score()
+                pygame.mixer.Sound.play(drop_sound)
             else:
                 player.add_score()
 
