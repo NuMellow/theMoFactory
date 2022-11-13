@@ -3,6 +3,7 @@ from random import randint
 from math import e
 import pygame
 import os
+import time
 
 
 # Initialize pygame
@@ -221,6 +222,26 @@ def resetComputer(computer, ball):
 
 def main():
     running = True
+
+    #starting screen
+    title = pygame.image.load(os.path.join(img_dir, 'title.png'))
+    control_screen = pygame.image.load(os.path.join(img_dir, 'controls.png'))
+    instructions = pygame.image.load(os.path.join(img_dir, 'instructions.png'))
+
+    screen.blit(title, (0,0))
+    pygame.display.update()
+    time.sleep(2)
+    screen.blit(control_screen, (0,0))
+    pygame.display.update()
+    time.sleep(2)
+    screen.blit(instructions, (0,0))
+    pygame.display.update()
+
+    start = False
+    while not start:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN and (event.key == pygame.K_SPACE or event.key == pygame.K_RETURN):
+                start = True
 
     #display the background
     screen.blit(background, (0,0))
