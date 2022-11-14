@@ -16,6 +16,8 @@ SCREEN_HEIGHT = 480
 WINNING_SCORE = 333
 HUD_COLOR = (65, 61, 61)
 white = (255, 255, 255)
+yellow = (250, 228, 114)
+grey = (131,128,127)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -25,7 +27,11 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 #backgronud
 img_dir = os.path.join('img', 'games', 'pro_football')
 bg = os.path.join(img_dir, 'football_bg.png')
+win1 = os.path.join(img_dir, 'win1.png')
+win2 = os.path.join(img_dir, 'win2.png')
 background = pygame.image.load(bg)
+bg_win1 = pygame.image.load(win1)
+bg_win2 = pygame.image.load(win2)
 
 #functions to create our resources
 def load_image(name, colorKey=None):
@@ -220,8 +226,32 @@ def resetComputer(computer, ball):
     computer.clear()
     screen.blit(computer.image, computer.rect)
 
+def new_game_prompt(left):
+    font = pygame.font.SysFont(None, 60)
+    text = font.render("Play again? ", True, white)
+
+    if left:
+        yes_text = font.render("Y  ", True, yellow)
+        no_text = font.render("/ N", True, grey)
+    else:
+        yes_text = font.render("Y /", True, grey)
+        no_text = font.render("  N", True, yellow)
+
+    screen.blit(text, (40, 430))
+    screen.blit(yes_text, ((SCREEN_WIDTH/2), 430))
+    screen.blit(no_text, ((SCREEN_WIDTH/2 + 40), 430))
+
+def restart(computer, ball, player):
+    global background
+    background = pygame.image.load(bg)
+    pygame.draw.rect(background, HUD_COLOR, [0, 380, SCREEN_WIDTH, 100])
+    computer.__init__()
+    player.__init__()
+    ball.__init__()
+
 def main():
     running = True
+    global background
 
     #starting screen
     title = pygame.image.load(os.path.join(img_dir, 'title.png'))
@@ -240,7 +270,10 @@ def main():
     start = False
     while not start:
         for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN and (event.key == pygame.K_SPACE or event.key == pygame.K_RETURN):
+            if event.type == pygame.QUIT:
+                start = True
+                running = False
+            elif event.type == pygame.KEYDOWN and (event.key == pygame.K_SPACE or event.key == pygame.K_RETURN):
                 start = True
 
     #display the background
@@ -322,12 +355,43 @@ def main():
                 player.add_score()
 
             print(player.score, computer.score)
-            if has_won(player):
-                print("Woo! Player won")
-                break
-            elif has_won(computer):
-                print("Computer won. Woo!")
-                break
+            if has_won(player) or has_won(computer):
+                end = False
+                left = True
+                bg_switch_timer = 60
+                bg_count = 0
+                bg_switch = 0
+                while not end:
+                    if has_won(player):
+                        if bg_count % bg_switch_timer == 0:
+                            if bg_switch == 0:
+                                background = bg_win1
+                                bg_switch = 1
+                            else:
+                                background = bg_win2
+                                bg_switch = 0
+                        bg_count += 1
+                    screen.blit(background, (0,0))
+                    new_game_prompt(left)
+                    allsprites.draw(screen)
+                    pygame.draw.rect(background, HUD_COLOR, [0, 380, SCREEN_WIDTH, 100])
+                    pygame.display.update()
+
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            end = True
+                            running = False
+                        elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                            left = False
+                        elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                            left = True
+                        elif event.type == pygame.KEYDOWN and (event.key == pygame.K_SPACE or event.key == pygame.K_RETURN):
+                            if left:
+                                end = True
+                                restart(computer, ball, player)
+                            else:
+                                end = True
+                                running = False
 
             ball.thrown = 0
             hit = False
