@@ -36,9 +36,11 @@ def get_response():
 
     try:
         print("You said " + r.recognize_google(audio))
+        screen.blit(background, (0,0))
+        pygame.display.update()
         pygame.mixer.Sound.play(response)
         time.sleep(10)
-        os.system("shutdown /s /t 1")
+        # os.system("shutdown /s /t 1")
     except LookupError:
         print("Could no understand audio")
     except Exception:
@@ -80,7 +82,6 @@ def main():
             pygame.mixer.Sound.play(question)
             #ask the question
 
-        pygame.display.update()
         #get response
         if asked == True and answered == False and start_mic == True:
             #show microphone
@@ -88,6 +89,9 @@ def main():
             pygame.display.update()
             answered = True
             get_response()
+
+        screen.blit(background, (0,0))
+        pygame.display.update()
     
     pygame.quit()
 
