@@ -1,4 +1,3 @@
-import math
 from random import randint
 from math import e
 import pygame
@@ -24,7 +23,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 # Title and icon
 
 
-#backgronud
+#background
 img_dir = os.path.join('img', 'games', 'pro_football')
 bg = os.path.join(img_dir, 'football_bg.png')
 win1 = os.path.join(img_dir, 'win1.png')
