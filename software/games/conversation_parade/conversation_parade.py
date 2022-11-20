@@ -180,6 +180,8 @@ def main():
                 q_image = load_image(question_img_name[8], -1, True)
             elif seconds > 4.3:
                 q_image = load_image(question_img_name[9], -1, True)
+            if seconds >= 5 and start_mic == False:
+                start_mic = True
 
         #get response
         if asked == True and answered == False and start_mic == True:
