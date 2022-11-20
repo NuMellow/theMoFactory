@@ -19,10 +19,14 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 bg = os.path.join('img', 'cp_bg.png')
 mic = os.path.join('img', 'mic_scaled.png')
 blue_bg = os.path.join('img', 'blue_bg.png')
+green_bg = os.path.join('img', 'green_bg.png')
 background = pygame.image.load(bg)
 mic_image = pygame.image.load(mic)
 blue_background = pygame.image.load(blue_bg)
+green_background = pygame.image.load(green_bg)
 question_img_name = ["q1.png", "q2.png", "q3.png", "q4.png", "q5.png", "q6.png", "q7.png", "q8.png", "q9.png", "q10.png"]
+response_img_name = ["r1.png", "r2.png", "r3.png", "r4.png", "r5.png", "r6.png",]
+bmo_faces = ["b1.png", "b2.png", "b3.png"]
 
 def load_image(name, color_key=None, ret_surf=False):
     full_path = os.path.join('img', name)
@@ -91,20 +95,21 @@ response = load_sound("response.wav")
 
 def get_response():
     r= sr.Recognizer()
+    response_ticks = None
     with sr.Microphone() as source:
         audio = r.listen(source)
 
     try:
         print("You said " + r.recognize_google(audio))
-        # screen.blit(background, (0,0))
-        # pygame.display.update()
         pygame.mixer.Sound.play(response)
-        # time.sleep(10)
+        response_ticks = pygame.time.get_ticks()
         # os.system("shutdown /s /t 1")
     except LookupError:
         print("Could not understand audio")
     except Exception:
         print("something went wrong!")
+    
+    return response_ticks
 
 def main():
     running = True
@@ -112,6 +117,8 @@ def main():
     answered = False
     start_mic = False
     q_image = None
+    response_ticks = None
+    bmo_talking = False
 
     #display the background
     screen.blit(background, (0,0))
@@ -151,11 +158,16 @@ def main():
             pygame.mixer.Sound.play(question)
             start_ticks = pygame.time.get_ticks()
 
-        screen.blit(blue_background, (0,0))
-        red_balloon.update()
-        green_balloon.update()
-        yellow_balloon.update()
-        orange_balloon.update()
+        if answered:
+            screen.blit(green_background, (0,0,))
+        else:
+            screen.blit(blue_background, (0,0))
+        
+        if not bmo_talking:
+            red_balloon.update()
+            green_balloon.update()
+            yellow_balloon.update()
+            orange_balloon.update()
 
         if start_ticks and not start_mic:
             seconds = (pygame.time.get_ticks()-start_ticks)/1000
@@ -182,6 +194,7 @@ def main():
                 q_image = load_image(question_img_name[9], -1, True)
             if seconds >= 5 and start_mic == False:
                 start_mic = True
+                q_image = None
 
         #get response
         if asked == True and answered == False and start_mic == True:
@@ -189,7 +202,42 @@ def main():
             screen.blit(mic_image, (700, 0))
             pygame.display.update()
             answered = True
-            get_response()
+            response_ticks = get_response()
+            start_mic = False
+
+        if response_ticks:
+            seconds = (pygame.time.get_ticks()-response_ticks)/1000
+            #show text
+            if seconds < 0.6:
+                q_image = load_image(response_img_name[0], -1, True)
+            elif seconds > 0.6 and seconds < 1:
+                q_image = load_image(response_img_name[1], -1, True)
+            elif seconds > 1 and seconds < 1.4:
+                q_image = load_image(response_img_name[2], -1, True)
+            elif seconds > 1.4 and seconds < 1.9:
+                q_image = load_image(response_img_name[3], -1, True)
+            elif seconds > 1.9 and seconds < 2.5:
+                q_image = load_image(response_img_name[4], -1, True)
+            elif seconds > 2.5 and seconds < 3.4:
+                q_image = load_image(response_img_name[5], -1, True)
+            elif seconds > 3.4 and seconds < 3.7:
+                bmo_talking = True
+                q_image = load_image(bmo_faces[0], -1, True)
+            elif seconds > 3.7 and seconds < 3.8:
+                q_image = load_image(bmo_faces[1], -1, True)
+            elif seconds > 3.8 and seconds < 4.1:
+                q_image = load_image(bmo_faces[2], -1, True)
+            elif seconds > 4.1 and seconds < 4.7:
+                q_image = load_image(bmo_faces[1], -1, True)
+            elif seconds > 4.7 and seconds < 4.8:
+                q_image = load_image(bmo_faces[2], -1, True)
+            elif seconds > 4.8 and seconds < 5.1:
+                q_image = load_image(bmo_faces[2], -1, True)
+            elif seconds > 5.1 and seconds < 5.4:
+                q_image = load_image(bmo_faces[1], -1, True)
+            if seconds >= 7.5:
+                q_image = None
+                running = False
 
         # screen.blit(background, (0,0))
         allsprites.draw(screen)
