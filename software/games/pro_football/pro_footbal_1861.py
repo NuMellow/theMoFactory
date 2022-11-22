@@ -24,7 +24,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
 #background
-img_dir = os.path.join('img', 'games', 'pro_football')
+img_dir = os.path.join('img')
 bg = os.path.join(img_dir, 'football_bg.png')
 win1 = os.path.join(img_dir, 'win1.png')
 win2 = os.path.join(img_dir, 'win2.png')
@@ -289,8 +289,6 @@ def main():
     move_timeout = 0
     throw_timer = 0
     hit = False
-    debug_mode = False
-    debug_count = 0
 
     #draw the hud
     pygame.draw.rect(background, HUD_COLOR, [0, 380, SCREEN_WIDTH, 100])
@@ -315,20 +313,6 @@ def main():
                 kick_timeout = 0
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                 resetComputer(computer, ball)
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_d:
-                debug_mode = not debug_mode 
-            #Debug mode stuff
-            elif debug_mode and event.type == pygame.KEYDOWN and event.key == pygame.K_n:
-                if debug_count == 0:
-                    print('computer')
-                    print(computer.__dict__)
-                elif debug_count == 1:
-                    print('ball')
-                    print(ball.__dict__)
-                elif debug_count == 2:
-                    print('player')
-                    print(player.__dict__)
-                debug_count = (debug_count + 1) % 3
         
         if ball.kicked:
             ball.hit()
@@ -353,7 +337,6 @@ def main():
             else:
                 player.add_score()
 
-            print(player.score, computer.score)
             if has_won(player) or has_won(computer):
                 end = False
                 left = True
