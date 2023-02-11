@@ -25,5 +25,5 @@ The heart and brain of BMO runs on a raspberry pi. Current models feature a 4inc
 BMO runs mostly on python and pygame. Current programs includes buttons script, games: pro football 1861 and conversation parade, with more programs and features coming soon.
 
 ### Getting started
-If you would like to build one, check out the wiki and choose which version you'd like to build. The BuildingBMO page will have step-by-step instructions on how to build your own. 
+If you would like to build one, check out [the wiki](https://github.com/NuMellow/theMoFactory/wiki) and choose which version you'd like to build. The Building BMO page will have step-by-step instructions on how to build your own. 
 Note: Versions will mostly be similar, but may have updated 3D printed parts and hardware.
