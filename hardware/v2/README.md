@@ -2,7 +2,7 @@
 
 ## Backplate.stl
 - added screw holes in the backplate
-- Added additional hole for ventilation and reaching batteries on/off switch
+- Added additional hole for ventilation and reaching battery's on/off switch
 
 ## Faceplate.stl
 - indented slots for button circuit boards
