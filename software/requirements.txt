@@ -1,5 +1,6 @@
 pygame
-PyAudio
 SpeechRecognition
 pynput
-RPi
+RPi.GPIO
+# uncomment if installing on windows machine
+# PyAudio
