@@ -5,13 +5,16 @@ Welcome to the MoFactory! A project with the goal of making a real and functioni
 
 ## Contents
 
+- [Getting Started](#getting-started)
 - [Contributing](#contributing)
 - [About BMO](#about-bmo)
     - [Hardware specs](#hardware-specs)
     - [Software specs](#software-specs)
-- [Getting Started](#getting-started)
 
         
+## Getting started
+If you would like to build one, check out [the wiki](https://github.com/NuMellow/theMoFactory/wiki) and choose which version you'd like to build. The Building BMO page will have step-by-step instructions on how to build your own. 
+Note: Versions will mostly be similar, but may have updated 3D printed parts and hardware.
 
 ## Contributing
 More details coming soon.
@@ -23,7 +26,3 @@ The heart and brain of BMO runs on a raspberry pi. Current models feature a 4inc
 
 ### Software Specs
 BMO runs mostly on python and pygame. Current programs includes buttons script, games: pro football 1861 and conversation parade, with more programs and features coming soon.
-
-### Getting started
-If you would like to build one, check out [the wiki](https://github.com/NuMellow/theMoFactory/wiki) and choose which version you'd like to build. The Building BMO page will have step-by-step instructions on how to build your own. 
-Note: Versions will mostly be similar, but may have updated 3D printed parts and hardware.
