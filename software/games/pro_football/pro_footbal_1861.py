@@ -57,6 +57,7 @@ kick_sound = load_sound("kick.wav")
 hit_sound = load_sound("hit.wav")
 drop_sound = load_sound("drop.wav")
 throw_sound = load_sound("throw.wav")
+win_audio = load_sound("congrats.wav")
 
 class Computer(pygame.sprite.Sprite):
     """CPU Abe"""
@@ -343,6 +344,8 @@ def main():
                 bg_switch_timer = 60
                 bg_count = 0
                 bg_switch = 0
+                if has_won(player):
+                    pygame.mixer.Sound.play(win_audio)
                 while not end:
                     if has_won(player):
                         if bg_count % bg_switch_timer == 0:
