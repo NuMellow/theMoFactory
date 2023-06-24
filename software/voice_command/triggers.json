@@ -1,0 +1,43 @@
+{
+    "congratulations": [
+        "I did it", 
+        "it worked"
+    ],
+    "dance_party": [
+        "play music", 
+        "I want to dance"
+    ],
+    "lorane": [
+        "I think rodney stole Fin's sock"
+    ],
+    "bmo_time": [
+        "what time is it"
+    ],
+    "video_games": [
+        "I'm bored", 
+        "what should we do"
+    ],
+    "dancing_machine": [
+        "you're on fire", 
+        "go BMO go BMO"
+    ],
+    "being_boring": [
+        "I don't know"
+    ],
+    "terrible": [
+        "I popped a bubble"
+    ],
+    "does_compute": [
+        "1 + 1 is 1"
+    ],
+    "fantastic": [
+        "I beat the dungeon"
+    ],
+    "rather_pizza": [
+        "I'd rather be dancing", 
+        "what do you want to do"
+    ],
+    "bmo_likes": [
+        "what do you think"
+    ]
+}

@@ -1,6 +1,9 @@
 import speech_recognition as sr
 import os
 import pygame
+import json
+import traceback
+import asyncio
 
 #Initialize pygame
 pygame.init()
@@ -14,7 +17,20 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 frame_dir = os.path.join("img", "frames")
 #list of animations. These should match the name of the folders in img/frames
 animation_dir = [
+    "being_boring",
+    "bmo_likes",
     "congratulations",
+    "dance_party",
+    "dancing_machine",
+    "does_compute",
+    "fantastic",
+    "idle1",
+    "idle2",
+    "lorane",
+    "terrible",
+    "video_games",
+    "bmo_time",
+    "rather_pizza"
 ]
 frame_rate = 41 #this is in milliseconds. a frame every 41 millisecods ~= 24 frames/sec
 
@@ -22,6 +38,8 @@ frame_rate = 41 #this is in milliseconds. a frame every 41 millisecods ~= 24 fra
 animations = {
 
 }
+trigger_file = open("triggers.json")
+triggers = json.load(trigger_file)
 
 def load_image(name, color_key=None, ret_surf=False):
     try:
@@ -70,6 +88,8 @@ def load_animations():
 
 def play(animation_name):
     pygame.mixer.Sound.play(responses.get(animation_name))
+    start_ticks = pygame.time.get_ticks()
+    play_anim(animation_name, start_ticks)
 
 def play_anim(animation_name, start_ticks):
     frames = animations.get(animation_name)
@@ -81,12 +101,19 @@ def play_anim(animation_name, start_ticks):
         milli_seconds = (pygame.time.get_ticks()-start_ticks)
         if milli_seconds % 41 == 0 and milli_seconds != popped_at:
             popped_at = milli_seconds
-            print(milli_seconds)
+            # print(milli_seconds)
             img, _ = frames_temp.pop(0)
             screen.blit(img, (0, 0))
             pygame.display.update()
+
+async def listen(r):
+    print("listening")
+    with sr.Microphone() as source:
+        audio = r.listen(source)
+
+    return audio
        
-def main():
+async def main():
     running  = True
     r = sr.Recognizer()
     load_animations()
@@ -96,10 +123,14 @@ def main():
     while running:
         clock.tick(60)
 
-        print("listening")
-        with sr.Microphone() as source:
-            audio = r.listen(source)
+        for event in pygame.event.get():
+            if event.type ==pygame.QUIT:
+                running = False
 
+        start_ticks = pygame.time.get_ticks()
+        play_anim("idle1", start_ticks)
+
+        audio = await listen(r)
         try:
             tts = r.recognize_google(audio)
             print("You said " + tts)
@@ -107,12 +138,17 @@ def main():
             #this is where the specific responses go
             if tts == "okay BMO" or tts == "a BMO":
                 print("Yaaay!")
-            elif tts == "quit":
+            elif tts == "close":
                 running = False
             elif tts == "I did it":
                 play("congratulations")
                 start_ticks = pygame.time.get_ticks()
                 play_anim("congratulations", start_ticks)
+
+            for k in triggers:
+                if tts in triggers[k]:
+                    print(k)
+                    play(k)
 
         except LookupError:
             print("could not understand audio")
@@ -120,9 +156,12 @@ def main():
         except sr.WaitTimeoutError:
             print("crickets")
             continue
+        except sr.UnknownValueError:
+            continue
         except Exception:
-            print("oop ")
+            print("oops, something is wrong")
+            print(traceback.format_exc())
 
 
 if __name__ == "__main__":
-    main()
+   asyncio.run(main())
