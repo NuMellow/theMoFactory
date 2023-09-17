@@ -108,6 +108,9 @@ def get_response():
         print("Could not understand audio")
     except Exception:
         print("something went wrong!")
+    finally:
+        pygame.mixer.Sound.play(response)
+        response_ticks = pygame.time.get_ticks()
     
     return response_ticks
 
