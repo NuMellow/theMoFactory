@@ -16,10 +16,11 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 #Title and icon
 
 #background
-bg = os.path.join('img', 'cp_bg.png')
-mic = os.path.join('img', 'mic_scaled.png')
-blue_bg = os.path.join('img', 'blue_bg.png')
-green_bg = os.path.join('img', 'green_bg.png')
+base_dir = "" if __name__ == "__main__" else os.path.join('games/conversation_parade')
+bg = os.path.join(base_dir, 'img', 'cp_bg.png')
+mic = os.path.join(base_dir, 'img', 'mic_scaled.png')
+blue_bg = os.path.join(base_dir, 'img', 'blue_bg.png')
+green_bg = os.path.join(base_dir, 'img', 'green_bg.png')
 background = pygame.image.load(bg)
 mic_image = pygame.image.load(mic)
 blue_background = pygame.image.load(blue_bg)
@@ -29,7 +30,7 @@ response_img_name = ["r1.png", "r2.png", "r3.png", "r4.png", "r5.png", "r6.png",
 bmo_faces = ["b1.png", "b2.png", "b3.png"]
 
 def load_image(name, color_key=None, ret_surf=False):
-    full_path = os.path.join('img', name)
+    full_path = os.path.join(base_dir, 'img', name)
     try:
         image = pygame.image.load(full_path)
     except pygame.error:
@@ -87,7 +88,7 @@ class Balloon(pygame.sprite.Sprite):
 
 #audio
 def load_sound(name):
-    audio_dir = os.path.join('audio', name)
+    audio_dir = os.path.join(base_dir, 'audio', name)
     return pygame.mixer.Sound(audio_dir)
 
 question = load_sound("question.wav")
@@ -248,7 +249,8 @@ def main():
             screen.blit(q_image, (0, 0)) 
         pygame.display.update()
     
-    pygame.quit()
+    if __name__ == "__main__":
+        pygame.quit()
 
 if __name__ == "__main__":
     main()
