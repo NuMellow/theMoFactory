@@ -24,7 +24,8 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
 #background
-img_dir = os.path.join('img')
+base_dir = "" if __name__ == "__main__" else os.path.join('games/pro_football')
+img_dir = os.path.join(base_dir, 'img')
 bg = os.path.join(img_dir, 'football_bg.png')
 win1 = os.path.join(img_dir, 'win1.png')
 win2 = os.path.join(img_dir, 'win2.png')
@@ -48,8 +49,8 @@ def load_image(name, colorKey=None):
     return image, image.get_rect()
 
 def load_sound(name):
-    dir = os.path.join('audio', name)
-    return pygame.mixer.Sound(dir)
+    sound_dir = os.path.join(base_dir, 'audio', name)
+    return pygame.mixer.Sound(sound_dir)
 
 #load sounds
 move_sound = load_sound("move.wav")
@@ -397,8 +398,9 @@ def main():
         computer_score(computer.score)
         allsprites.draw(screen)
         pygame.display.update()
-
-    pygame.quit()      
+    
+    if __name__ == "__main__": 
+        pygame.quit()      
 
 if __name__ == "__main__":
     main()

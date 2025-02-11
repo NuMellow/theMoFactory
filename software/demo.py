@@ -1,11 +1,13 @@
 import pygame
 import os
+# from games import *
+from menu import bmo_menu
 
 # Initializes pygame
 pygame.init()
 
 # create the screen
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((800, 480))
 
 # Title and icon
 pygame.display.set_caption("BMO")
@@ -26,7 +28,8 @@ def bmo():
 	screen.blit(bmo_face, (bmo_x, bmo_y))
 
 def openMenu():
-	menu_bg = (0,0,0)
+	# menu_bg = (0,0,0)
+	bmo_menu.main()
 
 #Game loop
 running = True
