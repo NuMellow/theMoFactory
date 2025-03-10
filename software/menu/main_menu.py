@@ -1,30 +1,37 @@
-from .menu import Menu, update_is_enabled_for_menu_group
-from games.pro_football import pro_footbal_1861
+from . import menu_enums
+from .menu import Menu
+from .menu_item import MenuItem
 
-class GamesMenu(Menu):
+class MainMenu(Menu):
+	def __init__(self):
+		super().__init__()
+		self.menu_items: list[MenuItem] = [
+			GamesMenuItem(),
+			CameraMenuItem(),
+			QuitMenuItem(),
+		]
+		self.name = menu_enums.MAIN_MENU
+
+class GamesMenuItem(MenuItem):
 	
 	def __init__(self):
 		super().__init__()
-		self.name = "Games"
+		self.name = menu_enums.GAMES_MENU_ITEM
+		self.is_sub_menu = True
 		
-	def on_click(self, 
-				menu_to_hide: list[Menu], 
-				menu_to_show: list[Menu],
-	):
+	def on_click(self):
 		print("Open games")
-		update_is_enabled_for_menu_group(menu_to_hide, False)
-		update_is_enabled_for_menu_group(menu_to_show, True)
+		return menu_enums.GAMES_MENU
 
-class CameraMenu(Menu):
+class CameraMenuItem(MenuItem):
 	def __init__(self):
 		super().__init__()
 		self.name = "Camera"
 		
-	def on_click(self, menu_item: Menu):
+	def on_click(self,):
 		print(self.name)
-		menu_item.is_enabled = True
 		
-class QuitMenu(Menu):
+class QuitMenuItem(MenuItem):
 	def __init__(self):
 		super().__init__()
 		self.name = "Quit"
@@ -32,7 +39,3 @@ class QuitMenu(Menu):
 	def on_click(self):
 		print(self.name)
 		self.pygame.quit()
-
-if __name__ == "__main__":
-	my_menu = GamesMenu()
-	my_menu.on_click()

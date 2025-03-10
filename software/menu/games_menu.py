@@ -1,38 +1,48 @@
 import sys
 
 sys.path.append("../software")
-from .menu import Menu, update_is_enabled_for_menu_group
+from . import menu_enums
+from .menu import Menu
+from .menu_item import MenuItem
 from games.pro_football import pro_footbal_1861
 from games.conversation_parade import conversation_parade
 
-class ProFootballMenu(Menu):
+
+class GamesMenu(Menu):
 	
 	def __init__(self):
 		super().__init__()
-		self.name = "Pro Football 1861"
+		self.menu_items: list[MenuItem] = [
+			ProFootballMenu(),
+			ConversationParadeMenu(),
+			BackMenu()
+		]
+		self.name = menu_enums.GAMES_MENU
+
+class ProFootballMenu(MenuItem):
+	
+	def __init__(self):
+		super().__init__()
+		self.name = menu_enums.PRO_FOOTBALL_MENU_ITEM
 		
-	def on_click(self):
+	def on_click(self) -> None:
 		print("Opening football")
 		pro_footbal_1861.main()
 		
-class ConversationParadeMenu(Menu):
+class ConversationParadeMenu(MenuItem):
 	
 	def __init__(self):
 		super().__init__()
-		self.name = "Conversation Parade"
+		self.name = menu_enums.CONVERSATION_PARADE_MENU_ITEM
 		
-	def on_click(self):
+	def on_click(self) -> None:
 		conversation_parade.main()
 		
-class BackMenu(Menu):
+class BackMenu(MenuItem):
 	def __init__(self):
 		super().__init__()
-		self.name = "Back"
+		self.name = menu_enums.BACK_MENU_ITEM
+		self.is_sub_menu = True
 
-	def on_click(
-		self,
-		menu_to_hide: list[Menu],
-		menu_to_show: list[Menu],
-	):
-		update_is_enabled_for_menu_group(menu_to_hide, False)
-		update_is_enabled_for_menu_group(menu_to_show, True)
+	def on_click(self) -> str:
+		return menu_enums.MAIN_MENU
