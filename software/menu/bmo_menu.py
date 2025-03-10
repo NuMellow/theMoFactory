@@ -32,8 +32,9 @@ def main():
   mouse_clicked = False
   item_pos = 0
   item_clicked = False
+  running = True
 
-  while True:
+  while running:
     # stores the (x,y) coordinates into  
     # the variable as a tuple  
     mouse = pygame.mouse.get_pos() 
@@ -52,6 +53,8 @@ def main():
         item_pos -= 1 
       elif ev.type == pygame.KEYDOWN and (ev.key == pygame.K_SPACE or ev.key == pygame.K_RETURN):
         item_clicked = True
+      elif ev.type == pygame.KEYDOWN and ev.key == pygame.K_ESCAPE:
+        running = False
                   
     # fills the screen with a color  
     screen.fill(bg_color) 
