@@ -2,13 +2,9 @@
 import pygame  
 import sys  
 
-from .menu_enums import MAIN_MENU_ITEMS, GAMES_MENU_ITEMS  
-from .menu import (
-  update_is_enabled_for_menu_group,
-  set_menu_positions,
-  is_menu_group_active,
-)
-  
+from . import menu_enums
+from .menu_dir import MenuDir
+
 # initializing the constructor  
 pygame.init()  
   
@@ -29,53 +25,11 @@ bg_color = (30, 57, 52)  # bmo background color
 width = screen.get_width()
 height = screen.get_height()  
 
-def render_main_menu(mouse, item):
-  #render main menu items
-  for item in MAIN_MENU_ITEMS.values():
-    if item.is_enabled:
-      item_box = item.get_bounding_box()
-      if (
-        (item_box[0] <= mouse[0] <= (item_box[0] + item_box[2])
-        and item_box[1] <= mouse[1] <= (item_box[1] + item_box[3]))
-        or 
-        (item_pos >= 0 and item.name == list(MAIN_MENU_ITEMS.values())[item_pos].name)
-      ):
-        #If the mouse is hovering over a menu item,
-        #or a menu item is selected using arrows, highlight it
-        pygame.draw.rect(screen, color_light, item_box)
-      else:
-        #else don't highlight it
-        pygame.draw.rect(screen, color_dark, item_box)
-      
-      if mouse_clicked:
-        if (
-          item_box[0] <= mouse_x <= (item_box[0] + item_box[2])
-          and item_box[1] <= mouse[1] <= (item_box[1] + item_box[3])
-        ):
-          if item.name == "Camera":
-            item.on_click(MAIN_MENU_ITEMS["GAMES"])
-          elif item.name == "Games":
-            item.on_click(
-              MAIN_MENU_ITEMS.values(), 
-              GAMES_MENU_ITEMS.values()
-            )
-          else:
-            item.on_click()
-          mouse_clicked = False
-          mouse_x = -1
-          mouse_y = -1
-      screen.blit(
-        item.render_font(),
-        item.location
-      )
-
 def main():
-  update_is_enabled_for_menu_group(MAIN_MENU_ITEMS.values(), True)
-  set_menu_positions(MAIN_MENU_ITEMS.values())
-  set_menu_positions(GAMES_MENU_ITEMS.values())
+  menu_dir = MenuDir()
+  menu_dir.set_active_menu(menu_enums.MAIN_MENU)
+  menu_dir.set_menu_item_positions()
   mouse_clicked = False
-  mouse_x = -1
-  mouse_y = -1
   item_pos = 0
   item_clicked = False
 
@@ -91,8 +45,6 @@ def main():
       #checks if a mouse is clicked  
       if ev.type == pygame.MOUSEBUTTONDOWN:
         mouse_clicked = True
-        mouse_x = mouse[0]
-        mouse_y = mouse[1]
       # cycle through menu items using the arrow buttons
       elif ev.type == pygame.KEYDOWN and ev.key == pygame.K_DOWN:
         item_pos += 1
@@ -104,109 +56,42 @@ def main():
     # fills the screen with a color  
     screen.fill(bg_color) 
     
-    #render main menu items
-    # render_main_menu(mouse)
-    for item in MAIN_MENU_ITEMS.values():
-      if item.is_enabled:
-        item_box = item.get_bounding_box()
-        cursor_pos = item_pos % len(MAIN_MENU_ITEMS) 
-        if (
-          (item_box[0] <= mouse[0] <= (item_box[0] + item_box[2])
-          and item_box[1] <= mouse[1] <= (item_box[1] + item_box[3]))
-          or 
-          (item.name == list(MAIN_MENU_ITEMS.values())[cursor_pos].name)
-        ):
-          #If the mouse is hovering over a menu item,
-          #or a menu item is selected using arrows, highlight it
-          pygame.draw.rect(screen, color_light, item_box)
-        else:
-          #else don't highlight it
-          pygame.draw.rect(screen, color_dark, item_box)
-        
-        if mouse_clicked:
-          if (
-            item_box[0] <= mouse_x <= (item_box[0] + item_box[2])
-            and item_box[1] <= mouse[1] <= (item_box[1] + item_box[3])
+    #render menu items
+    for menu in menu_dir.get_menus():
+      if menu.is_active:
+        for menu_item in menu.menu_items:
+          item_bounding_box = menu_item.get_bounding_box()
+          cursor_pos = item_pos % len(menu.menu_items)
+          if (menu_item.is_mouse_in_bounding_box(mouse)
+             or menu_item.name == menu.menu_items[cursor_pos].name
           ):
-            if item.name == "Camera":
-              item.on_click(MAIN_MENU_ITEMS["GAMES"])
-            elif item.name == "Games":
-              item.on_click(
-                MAIN_MENU_ITEMS.values(), 
-                GAMES_MENU_ITEMS.values()
-              )
-            else:
-              item.on_click()
-            mouse_clicked = False
-            mouse_x = -1
-            mouse_y = -1
-        screen.blit(
-          item.render_font(),
-          item.location
-        )
+            #If the mouse is hovering over a menu item,
+            #or a menu item is selected using arrows, draw and highlight it
+            pygame.draw.rect(screen, color_light, item_bounding_box)
+          else:
+            #else just draw it
+            pygame.draw.rect(screen, color_dark, item_bounding_box)
 
-    #render game menu items    
-    for item in GAMES_MENU_ITEMS.values():
-      if item.is_enabled:
-        item_box = item.get_bounding_box()
-        cursor_pos = item_pos % len(GAMES_MENU_ITEMS)
-        if (
-          (item_box[0] <= mouse[0] <= (item_box[0] + item_box[2])
-          and item_box[1] <= mouse[1] <= (item_box[1] + item_box[3]))
-          or (item.name == list(GAMES_MENU_ITEMS.values())[cursor_pos].name)
-        ):
-          pygame.draw.rect(screen, color_light, item_box)
-        else:
-          pygame.draw.rect(screen, color_dark, item_box)
-        
-        if mouse_clicked:
-          if (
-            item_box[0] <= mouse_x <= (item_box[0] + item_box[2])
-            and item_box[1] <= mouse[1] <= (item_box[1] + item_box[3])
+          if (mouse_clicked and menu_item.is_mouse_in_bounding_box(mouse)
+              or item_clicked
           ):
-            if item.name == "Back":
-              item.on_click(
-                GAMES_MENU_ITEMS.values(), 
-                MAIN_MENU_ITEMS.values()
-              )
+            selected_menu_item = menu_item if mouse_clicked else menu.menu_items[cursor_pos]
+            if selected_menu_item.is_sub_menu:
+              menu_to_show = selected_menu_item.on_click()
+              menu_dir.set_active_menu(menu_to_show)
             else:
-              item.on_click()
+              selected_menu_item.on_click()
+
             mouse_clicked = False
-            mouse_x = -1
-            mouse_y = -1
-        screen.blit(
-          item.render_font(),
-          item.location
-        )
-    
-    if item_clicked:
-      #check active
-      if is_menu_group_active(MAIN_MENU_ITEMS.values()):
-        item = list(MAIN_MENU_ITEMS.values())[cursor_pos]
-        if item.name == "Camera":
-          item.on_click(MAIN_MENU_ITEMS["GAMES"])
-        elif item.name == "Games":
-          item.on_click(
-            MAIN_MENU_ITEMS.values(), 
-            GAMES_MENU_ITEMS.values()
+            item_clicked = False
+
+          screen.blit(
+            menu_item.render_font(),
+            menu_item.location
           )
-        else:
-          item.on_click()
-      elif is_menu_group_active(GAMES_MENU_ITEMS.values()):
-        item = list(GAMES_MENU_ITEMS.values())[cursor_pos]
-        if item.name == "Back":
-          item.on_click(
-            GAMES_MENU_ITEMS.values(), 
-            MAIN_MENU_ITEMS.values()
-          )
-        else:
-          item.on_click()
-      item_clicked = False
-      item_pos = 0
 
     mouse_clicked = False
-    mouse_x = -1
-    mouse_y = -1
+    item_clicked = False
       
     # updates the frames of the game  
     pygame.display.update()  

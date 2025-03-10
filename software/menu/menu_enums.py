@@ -1,27 +1,12 @@
-from .main_menu import (
-	GamesMenu,
-	CameraMenu,
-	QuitMenu,
-)
-from .games_menu import *
-
-GAMES = GamesMenu()
-CAMERA = CameraMenu()
-QUIT = QuitMenu()
-
-MAIN_MENU_ITEMS = {
-	"GAMES": GAMES,
-	"CAMERA": CAMERA,
-	"QUIT": QUIT,
-}
+#Menu Names
+MAIN_MENU = "Main_menu"
+GAMES_MENU = "Games_menu"
 
 
-PRO_FOOTBALL = ProFootballMenu()
-CONVERSATION_PARADE = ConversationParadeMenu()
-GAMES_BACK = BackMenu()
-
-GAMES_MENU_ITEMS = {
-	"PRO FOOTBALL": PRO_FOOTBALL,
-	"CONVO PARADE": CONVERSATION_PARADE,
-	"BACK": GAMES_BACK,
-}
+#Menu item Names
+GAMES_MENU_ITEM = "Games"
+CAMERA_MENU_ITEM = "Camera"
+QUIT_MENU_ITEM = "QUIT"
+PRO_FOOTBALL_MENU_ITEM = "Pro Football 1861"
+CONVERSATION_PARADE_MENU_ITEM = "Conversation Parade"
+BACK_MENU_ITEM = "Back"
