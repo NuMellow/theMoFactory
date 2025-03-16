@@ -81,7 +81,9 @@ def load_animations():
     for anim in animation_dir:
         dir = os.path.join(frame_dir, anim)
         animations.update({anim: []})
-        for filename in os.listdir(dir):
+        filenames = os.listdir(dir)
+        filenames.sort()
+        for filename in filenames:
             file = os.path.join(dir, filename)
             if os.path.isfile(file):
                 img = load_image(file)
